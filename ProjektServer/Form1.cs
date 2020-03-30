@@ -24,11 +24,12 @@ namespace ProjektServer
         int port = 12345;
 
         DatabaseManager dbManager;
-
+        Server server;
         public Form1()
         {
             InitializeComponent();
             dbManager = new DatabaseManager();
+            //server = new Server(this);
             try
             {
                 listener = new TcpListener(IPAddress.Any, port);
@@ -120,6 +121,10 @@ namespace ProjektServer
         public void LogMessage(string message)
         {
             listBox1.Items.Add(message);
+        }
+        public void WriteMessage(MeObj m)
+        {
+            LogMessage($"{m.UserName}: {m.TextMessage}");
         }
         
     }

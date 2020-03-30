@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,11 +13,12 @@ namespace ProjektServer
     {
         TcpClient client;
         NetworkStream stream;
+        Server server;
 
-
-        public ServerClient(TcpClient c)
+        public ServerClient(TcpClient c, Server s)
         {
             client = c;
+            server = s;
             stream = c.GetStream();
 
             RecieveMessageAsync();
@@ -36,6 +38,26 @@ namespace ProjektServer
             catch (Exception e)
             {
 
+            }
+            object obj = Serializer.DeserializeObject(buffer);
+            CheckRecievedObject(obj);
+
+            try
+            {
+                await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
+            }
+            catch (Exception e)
+            {
+                server.RecieveMessage(null, "Förbindelse misslyckades i serverclient: " + e.Message);
+            }
+            if (client.Connected)
+                RecieveMessageAsync();
+        }
+        void CheckRecievedObject(object obj)
+        {
+            if(obj is MeObj)
+            {
+                server.RecieveMessage((MeObj)obj);
             }
         }
     }
