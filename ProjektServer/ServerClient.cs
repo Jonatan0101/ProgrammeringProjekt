@@ -60,5 +60,19 @@ namespace ProjektServer
                 server.RecieveMessage((MeObj)obj);
             }
         }
+
+        public async Task SendMessageToClient(MeObj message)
+        {
+            byte[] buffer = Serializer.SerializeObject(message);
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                await stream.WriteAsync(buffer, 0, buffer.Length);
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
     }
 }

@@ -29,17 +29,18 @@ namespace ProjektServer
         {
             InitializeComponent();
             dbManager = new DatabaseManager();
-            //server = new Server(this);
-            try
-            {
-                listener = new TcpListener(IPAddress.Any, port);
-                listener.Start();
-            }
-            catch (Exception e)
-            {
-                LogMessage("Fel med start" + e.Message);
-            }
-            RecieveClientAsync();
+            server = new Server(this);
+            
+            //try
+            //{
+            //    listener = new TcpListener(IPAddress.Any, port);
+            //    listener.Start();
+            //}
+            //catch (Exception e)
+            //{
+            //    LogMessage("Fel med start" + e.Message);
+            //}
+            //RecieveClientAsync();
         }
 
         async void RecieveClientAsync()
@@ -117,10 +118,19 @@ namespace ProjektServer
             }
             return null;
         }
-
+        private delegate void SafeCallDelegate(string text);
         public void LogMessage(string message)
         {
-            listBox1.Items.Add(message);
+            // Sätter text på ett trådsäkert sätt
+            if (listBox1.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(LogMessage);
+                listBox1.Invoke(d, new object[] { message });
+            }
+            else
+            {
+                listBox1.Items.Add(message);
+            }
         }
         public void WriteMessage(MeObj m)
         {

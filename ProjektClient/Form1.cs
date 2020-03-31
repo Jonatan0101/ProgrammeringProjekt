@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClassLibrary;
@@ -25,6 +26,38 @@ namespace ProjektClient
             InitializeComponent();
             client = new TcpClient();
             btnSend.Enabled = false;
+            new Thread(RecieveMessages).Start();
+        }
+        void RecieveMessages()
+        {
+            while (true)
+            {
+                byte[] buffer = new byte[client.ReceiveBufferSize];
+                IPEndPoint clientEP = (IPEndPoint)client.Client.RemoteEndPoint;
+                int bytesRead = 0;
+
+                try
+                {
+                    NetworkStream stream = client.GetStream();
+                    bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+                    object obj = Serializer.DeserializeObject(buffer);
+                    CheckRecievedObject(obj);
+                    MessageBox.Show("Recieved " + obj.ToString());
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+        }
+        void CheckRecievedObject(object obj)
+        {
+            if (obj is MeObj)
+            {
+                MeObj recMes = (MeObj)obj;
+                lbxRecieved.Items.Add($"{recMes.UserName}: {recMes.TextMessage}");
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
