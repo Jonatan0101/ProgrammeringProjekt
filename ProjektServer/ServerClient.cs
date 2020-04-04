@@ -42,14 +42,15 @@ namespace ProjektServer
             object obj = Serializer.DeserializeObject(buffer);
             CheckRecievedObject(obj);
 
-            try
-            {
-                await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
-            }
-            catch (Exception e)
-            {
-                server.RecieveMessage(null, "Förbindelse misslyckades i serverclient: " + e.Message);
-            }
+            //try
+            //{
+            //    await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
+            //}
+            //catch (Exception e)
+            //{
+            //    server.RecieveMessage(null, "Förbindelse misslyckades i serverclient: " + e.Message);
+            //}
+
             if (client.Connected)
                 RecieveMessageAsync();
         }
@@ -61,13 +62,13 @@ namespace ProjektServer
             }
         }
 
-        public async Task SendMessageToClient(MeObj message)
+        public void SendMessageToClient(MeObj message)
         {
             byte[] buffer = Serializer.SerializeObject(message);
             try
             {
                 NetworkStream stream = client.GetStream();
-                await stream.WriteAsync(buffer, 0, buffer.Length);
+                stream.Write(buffer, 0, buffer.Length);
             }
             catch (Exception e)
             {

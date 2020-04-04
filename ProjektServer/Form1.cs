@@ -19,9 +19,6 @@ namespace ProjektServer
     //SERVER
     public partial class Form1 : Form
     {
-        TcpListener listener;
-        TcpClient client;
-        int port = 12345;
 
         DatabaseManager dbManager;
         Server server;
@@ -43,60 +40,7 @@ namespace ProjektServer
             //RecieveClientAsync();
         }
 
-        async void RecieveClientAsync()
-        {
-            try
-            {
-                client = await listener.AcceptTcpClientAsync();
-                LogMessage("Klient kopplad " + client.Client.RemoteEndPoint.ToString());
-            }
-            catch (Exception e)
-            {
-                LogMessage("Fel med RecieveClientsAsync" + e.Message);
-            }
-            if(client.Connected)
-                RecieveMessageAsync();
-        }
-        async void RecieveMessageAsync()
-        {
-            byte[] buffer = new byte[client.ReceiveBufferSize];
-            IPEndPoint clientEP = (IPEndPoint)client.Client.RemoteEndPoint;
-            int bytesRead = 0;
-
-            try
-            {
-                NetworkStream stream = client.GetStream();
-                bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-            }
-            catch (Exception e)
-            {
-                LogMessage("Fel med RecieveMessageAsync" + e.Message);
-            }
-            object o = DeserializeObject(buffer);
-
-            if(o != null)
-            {
-                if(o is MeObj)
-                {
-                    LogMessage((o as MeObj).UserName + " : " + (o as MeObj).TextMessage);
-                    //dbManager.InsertMessage((o as MeObj).TextMessage, (o as MeObj).UserName);
-                }
-            }
-
-            try
-            {
-                await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
-            }
-            catch
-            {
-                LogMessage("Förbindelse misslyckades");
-            }
-
-            if (client.Connected)
-                RecieveMessageAsync();
-            else
-                RecieveClientAsync();
-        }
+        
 
         public object DeserializeObject(byte[] arrBytes)
         {

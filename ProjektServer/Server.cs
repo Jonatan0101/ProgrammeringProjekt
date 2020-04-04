@@ -19,9 +19,12 @@ namespace ProjektServer
         Form1 form;
         public Server(Form1 f)
         {
-            
+
             //RecieveClients();
-            new Thread(RecieveClients).Start();
+            Thread t = new Thread(RecieveClients);
+            t.IsBackground = true;
+            t.Start();
+
             form = f;
         }
         void RecieveClients()
@@ -33,15 +36,15 @@ namespace ProjektServer
                 TcpClient client = listener.AcceptTcpClient();
                 ConnectedClients.Add(new ServerClient(client, this));
             }
-            
+
 
         }
 
-        public async void SendMessage(MeObj message)
+        public void SendMessage(MeObj message)
         {
             foreach (ServerClient client in ConnectedClients)
             {
-                await client.SendMessageToClient(message);
+                client.SendMessageToClient(message);
             }
         }
 
@@ -51,7 +54,8 @@ namespace ProjektServer
             {
                 form.WriteMessage(message);
                 SendMessage(message);
-            }else
+            }
+            else
                 form.LogMessage(logMessage);
         }
 

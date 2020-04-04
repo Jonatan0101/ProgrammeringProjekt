@@ -26,7 +26,8 @@ namespace ProjektClient
             InitializeComponent();
             client = new TcpClient();
             btnSend.Enabled = false;
-            new Thread(RecieveMessages).Start();
+            ClientRecieve cRecieve = new ClientRecieve(client, this);
+            cRecieve.StartRecieving();
         }
         void RecieveMessages()
         {
@@ -49,6 +50,18 @@ namespace ProjektClient
                 {
 
                 }
+            }
+        }
+        private delegate void SafeCallDelegate(string text);
+        public void WriteMessage(string text)
+        {
+            if (lbxRecieved.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(WriteMessage);
+                lbxRecieved.Invoke(d, new object[] { text });
+            } else
+            {
+                lbxRecieved.Items.Add(text);
             }
         }
         void CheckRecievedObject(object obj)
