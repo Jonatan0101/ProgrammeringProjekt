@@ -18,7 +18,7 @@ namespace ClassLibrary
                 BinaryFormatter binForm = new BinaryFormatter();
                 memStream.Write(arrBytes, 0, arrBytes.Length);
                 memStream.Seek(0, SeekOrigin.Begin);
-                MeObj obj = (MeObj)binForm.Deserialize(memStream);
+                ChatMessage obj = (ChatMessage)binForm.Deserialize(memStream);
 
                 return obj;
             }

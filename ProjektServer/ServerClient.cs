@@ -35,40 +35,55 @@ namespace ProjektServer
                 bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 
             }
-            catch (Exception e)
-            {
+            catch (Exception){}
 
-            }
             object obj = Serializer.DeserializeObject(buffer);
             CheckRecievedObject(obj);
 
-            //try
-            //{
-            //    await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
-            //}
-            //catch (Exception e)
-            //{
-            //    server.RecieveMessage(null, "Förbindelse misslyckades i serverclient: " + e.Message);
-            //}
+            try
+            {
+                buffer = Serializer.SerializeObject(new ConnectionControl());
+                await client.GetStream().WriteAsync(buffer, 0, buffer.Length);
+            }
+            catch (Exception e)
+            {
+                server.RecieveMessage(null, "Förbindelse misslyckades i serverclient: " + e.Message);
+            }
 
             if (client.Connected)
                 RecieveMessageAsync();
         }
         void CheckRecievedObject(object obj)
         {
-            if(obj is MeObj)
+            if (obj is ChatMessage)
             {
-                server.RecieveMessage((MeObj)obj);
+                if ((obj as ChatMessage).UserName == "LogIn")
+                    server.RecieveMessage(null, "Added person to chat");
+                else
+                    server.RecieveMessage((ChatMessage)obj);
+            } else if (obj is ConnectionControl)
+            {
+                ConnectionControl cc = (ConnectionControl)obj;
+                if (cc.UserName == "LogIn")
+                {
+                    server.AddUserToList(cc.UserName);
+                }
+            } else if (obj is null) {
+                server.RecieveMessage(null, "Recieved null object");
+            }
+            else
+            {
+                server.RecieveMessage(null, "Recieved unknown object");
             }
         }
 
-        public void SendMessageToClient(MeObj message)
+        public async void SendMessageToClient(ChatMessage message)
         {
             byte[] buffer = Serializer.SerializeObject(message);
             try
             {
                 NetworkStream stream = client.GetStream();
-                stream.Write(buffer, 0, buffer.Length);
+                await stream.WriteAsync(buffer, 0, buffer.Length);
             }
             catch (Exception e)
             {

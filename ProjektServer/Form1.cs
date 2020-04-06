@@ -27,41 +27,9 @@ namespace ProjektServer
             InitializeComponent();
             dbManager = new DatabaseManager();
             server = new Server(this);
-            
-            //try
-            //{
-            //    listener = new TcpListener(IPAddress.Any, port);
-            //    listener.Start();
-            //}
-            //catch (Exception e)
-            //{
-            //    LogMessage("Fel med start" + e.Message);
-            //}
-            //RecieveClientAsync();
         }
 
         
-
-        public object DeserializeObject(byte[] arrBytes)
-        {
-            if (arrBytes.Length == 0)
-                return null;
-            try
-            {
-                MemoryStream memStream = new MemoryStream();
-                BinaryFormatter binForm = new BinaryFormatter();
-                memStream.Write(arrBytes, 0, arrBytes.Length);
-                memStream.Seek(0, SeekOrigin.Begin);
-                MeObj obj = (MeObj)binForm.Deserialize(memStream);
-
-                return obj;
-            }
-            catch (Exception e)
-            {
-                LogMessage("Fel med deserialisering: " + e.Message);
-            }
-            return null;
-        }
         private delegate void SafeCallDelegate(string text);
         public void LogMessage(string message)
         {
@@ -76,9 +44,14 @@ namespace ProjektServer
                 listBox1.Items.Add(message);
             }
         }
-        public void WriteMessage(MeObj m)
+        public void WriteMessage(ChatMessage m)
         {
             LogMessage($"{m.UserName}: {m.TextMessage}");
+        }
+
+        public void AddUserToList(string user)
+        {
+            lbxUsers.Items.Add(user);
         }
         
     }

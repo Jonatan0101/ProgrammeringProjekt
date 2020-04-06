@@ -40,7 +40,7 @@ namespace ProjektClient
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     object obj = Serializer.DeserializeObject(buffer);
-                    clientForm.WriteMessage($"{(obj as MeObj).UserName}: {(obj as MeObj).TextMessage}");
+                    clientForm.WriteMessage($"{(obj as ChatMessage).UserName}: {(obj as ChatMessage).TextMessage}");
                 }
                 catch (Exception e)
                 {

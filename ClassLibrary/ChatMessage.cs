@@ -5,15 +5,14 @@ using System.Text;
 namespace ClassLibrary
 {
     [Serializable]
-    public class MeObj
+    public class ChatMessage : BaseMessage
     {
-        public MeObj(string message, string user = "")
+        public ChatMessage(string message, string user = "")
         {
             TextMessage = message;
             if (user != "")
                 UserName = user;
         }
         public string TextMessage { get; set; }
-        public string UserName { get; set; }
     }
 }

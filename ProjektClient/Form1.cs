@@ -29,29 +29,7 @@ namespace ProjektClient
             ClientRecieve cRecieve = new ClientRecieve(client, this);
             cRecieve.StartRecieving();
         }
-        void RecieveMessages()
-        {
-            while (true)
-            {
-                byte[] buffer = new byte[client.ReceiveBufferSize];
-                IPEndPoint clientEP = (IPEndPoint)client.Client.RemoteEndPoint;
-                int bytesRead = 0;
-
-                try
-                {
-                    NetworkStream stream = client.GetStream();
-                    bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-                    object obj = Serializer.DeserializeObject(buffer);
-                    CheckRecievedObject(obj);
-                    MessageBox.Show("Recieved " + obj.ToString());
-                }
-                catch (Exception e)
-                {
-
-                }
-            }
-        }
+        
         private delegate void SafeCallDelegate(string text);
         public void WriteMessage(string text)
         {
@@ -62,14 +40,6 @@ namespace ProjektClient
             } else
             {
                 lbxRecieved.Items.Add(text);
-            }
-        }
-        void CheckRecievedObject(object obj)
-        {
-            if (obj is MeObj)
-            {
-                MeObj recMes = (MeObj)obj;
-                lbxRecieved.Items.Add($"{recMes.UserName}: {recMes.TextMessage}");
             }
         }
 
@@ -90,12 +60,25 @@ namespace ProjektClient
             {
                 lbxRecieved.Items.Add("Fel i connect" + e.Message);
             }
-            btnConnect.Enabled = false;
-            btnSend.Enabled = true;
+            if (client.Connected)
+            {
+                // Fungerar inte. Server mottar null
+                SendMessageAsync(new ConnectionControl("asdlökasldk"));
+
+                // Fungerar. Server mottar objektet
+                SendMessageAsync(new ChatMessage("Me", "user"));
+
+                btnConnect.Enabled = false;
+                btnSend.Enabled = true;
+            } else
+            {
+                
+            }
         }
-        private async void SendMessageAsync(MeObj message)
+
+        private async void SendMessageAsync(object message)
         {
-            byte[] buffer = SerializeToArray(message);
+            byte[] buffer = Serializer.SerializeObject(message);
             try
             {
                 NetworkStream stream = client.GetStream();
@@ -106,24 +89,11 @@ namespace ProjektClient
                 lbxRecieved.Items.Add("Fel med Send" + e.Message);
             }
         }
-
-        byte[] SerializeToArray(MeObj message)
-        {
-            if (message == null)
-                return null;
-            BinaryFormatter bf = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bf.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (txtMessage.Text == "")
                 return;
-            SendMessageAsync(new MeObj(txtMessage.Text, txtName.Text));
+            SendMessageAsync(new ChatMessage(txtMessage.Text, txtName.Text));
             txtMessage.Text = "";
         }
     }
