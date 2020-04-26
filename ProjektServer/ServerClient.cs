@@ -14,6 +14,7 @@ namespace ProjektServer
         TcpClient client;
         NetworkStream stream;
         Server server;
+        public string UserName { get; set; }
 
         public ServerClient(TcpClient c, Server s)
         {
@@ -57,27 +58,32 @@ namespace ProjektServer
         {
             if (obj is ChatMessage)
             {
-                if ((obj as ChatMessage).UserName == "LogIn")
-                    server.RecieveMessage(null, "Added person to chat");
-                else
-                    server.RecieveMessage((ChatMessage)obj);
+                server.RecieveMessage((ChatMessage)obj);
             } else if (obj is ConnectionControl)
             {
-                ConnectionControl cc = (ConnectionControl)obj;
-                if (cc.UserName == "LogIn")
+                
+                ConnectionControl connection = (ConnectionControl)obj;
+                server.RecieveMessage(null, connection.Status.ToString() + " status");
+                if (connection.Status == ConnectionStatus.LogIn)
                 {
-                    server.AddUserToList(cc.UserName);
+                    UserName = connection.UserName;
+                    server.AddUserToList(connection.UserName);
+                    server.RecieveMessage(null, connection.Status.ToString() + " status");
+                } else if(connection.Status == ConnectionStatus.LogOut)
+                {
+                    server.RemoveUserFromList(connection.UserName);
                 }
+
             } else if (obj is null) {
                 server.RecieveMessage(null, "Recieved null object");
             }
             else
             {
-                server.RecieveMessage(null, "Recieved unknown object");
+                server.RecieveMessage(null, "Recieved unknown");
             }
         }
 
-        public async void SendMessageToClient(ChatMessage message)
+        public async void SendMessageToClient(object message)
         {
             byte[] buffer = Serializer.SerializeObject(message);
             try

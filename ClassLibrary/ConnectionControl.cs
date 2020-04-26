@@ -7,11 +7,12 @@ namespace ClassLibrary
     [Serializable]
     public class ConnectionControl : BaseMessage
     {
-        //public ConnectionStatus Status { get; set; } = ConnectionStatus.Control;
+        public ConnectionStatus Status { get; set; }
         
-        public ConnectionControl(string user = "")
+        public ConnectionControl(string user = "", ConnectionStatus status = ConnectionStatus.Control)
         {
             UserName = user;
+            Status = status;
         }
         
     }

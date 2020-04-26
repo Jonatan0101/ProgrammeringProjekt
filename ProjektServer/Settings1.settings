@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ProjektServer" GeneratedClassName="Settings1">
+  <Profiles />
+  <Settings>
+    <Setting Name="Setting" Type="ClassLibrary.ConnectionStatus" Scope="User">
+      <Value Profile="(Default)">LogIn</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

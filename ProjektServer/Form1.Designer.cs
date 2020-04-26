@@ -54,10 +54,12 @@
             // lbxUsers
             // 
             this.lbxUsers.FormattingEnabled = true;
-            this.lbxUsers.Location = new System.Drawing.Point(614, 122);
+            this.lbxUsers.Location = new System.Drawing.Point(614, 109);
             this.lbxUsers.Name = "lbxUsers";
             this.lbxUsers.Size = new System.Drawing.Size(174, 316);
             this.lbxUsers.TabIndex = 3;
+            this.lbxUsers.SelectedIndexChanged += new System.EventHandler(this.lbxUsers_SelectedIndexChanged);
+            this.lbxUsers.DoubleClick += new System.EventHandler(this.lbxUsers_DoubleClick);
             // 
             // Form1
             // 

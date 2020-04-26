@@ -48,12 +48,63 @@ namespace ProjektServer
         {
             LogMessage($"{m.UserName}: {m.TextMessage}");
         }
-
         public void AddUserToList(string user)
         {
-            lbxUsers.Items.Add(user);
+            // Sätter text på ett trådsäkert sätt
+            if (lbxUsers.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(AddUserToList);
+                lbxUsers.Invoke(d, new object[] { user });
+            }
+            else
+            {
+                lbxUsers.Items.Add(user);
+            }
         }
-        
+        void RemoveUser(string user)
+        {
+            if (lbxUsers.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(RemoveUser);
+                lbxUsers.Invoke(d, new object[] { user });
+            } else
+            {
+
+            }
+        }
+        internal void RemoveUserFromList(string user)
+        {
+            if (lbxUsers.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(RemoveUserFromList);
+                lbxUsers.Invoke(d, new object[] { user });
+            }
+            else
+            {
+                for (int i = lbxUsers.Items.Count - 1; i > -1; i--)
+                {
+                    if (((string)lbxUsers.Items[i]).Contains(user))
+                    {
+                        lbxUsers.Items.RemoveAt(i);
+                    }
+                }
+            }
+            
+        }
+
+        private void lbxUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbxUsers_DoubleClick(object sender, EventArgs e)
+        {
+            if(lbxUsers.SelectedIndex != -1)
+            {
+                MessageBox.Show((string)lbxUsers.SelectedItem);
+                server.RemoveClient(((string)lbxUsers.SelectedItem));
+            }
+        }
     }
 
     

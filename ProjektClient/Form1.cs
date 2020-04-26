@@ -21,13 +21,15 @@ namespace ProjektClient
     {
         TcpClient client;
         int port = 12345;
+        ClientRecieve cRecieve;
         public Form1()
         {
             InitializeComponent();
+
             client = new TcpClient();
             btnSend.Enabled = false;
-            ClientRecieve cRecieve = new ClientRecieve(client, this);
-            cRecieve.StartRecieving();
+            cRecieve = new ClientRecieve(client, this);
+            
         }
         
         private delegate void SafeCallDelegate(string text);
@@ -46,6 +48,7 @@ namespace ProjektClient
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (!client.Connected) Connect();
+            if (client.Connected) cRecieve.StartRecieving();
         }
 
         private async void Connect()
@@ -62,11 +65,7 @@ namespace ProjektClient
             }
             if (client.Connected)
             {
-                // Fungerar inte. Server mottar null
-                SendMessageAsync(new ConnectionControl("asdlökasldk"));
-
-                // Fungerar. Server mottar objektet
-                SendMessageAsync(new ChatMessage("Me", "user"));
+                SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogIn));
 
                 btnConnect.Enabled = false;
                 btnSend.Enabled = true;
@@ -95,6 +94,11 @@ namespace ProjektClient
                 return;
             SendMessageAsync(new ChatMessage(txtMessage.Text, txtName.Text));
             txtMessage.Text = "";
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogOut));
         }
     }
 

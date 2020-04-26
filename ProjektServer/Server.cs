@@ -36,7 +36,16 @@ namespace ProjektServer
             }
         }
 
-        public void SendMessage(ChatMessage message)
+        public void RemoveClient(string user)
+        {
+            for (int i = 0; i < ConnectedClients.Count; i++)
+            {
+                if (ConnectedClients[i].UserName == user)
+                    ConnectedClients.Remove(ConnectedClients[i]);
+            }
+        }
+
+        public void SendMessage(object message)
         {
             foreach (ServerClient client in ConnectedClients)
             {
@@ -56,7 +65,11 @@ namespace ProjektServer
 
         public void AddUserToList(string user)
         {
-            form.AddUserToList(user + " -----");
+            form.AddUserToList(user);
+        }
+        public void RemoveUserFromList(string user)
+        {
+            form.RemoveUserFromList(user);
         }
 
         public void AlertMessage(string message)

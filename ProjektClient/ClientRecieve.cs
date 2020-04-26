@@ -40,12 +40,23 @@ namespace ProjektClient
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     object obj = Serializer.DeserializeObject(buffer);
-                    clientForm.WriteMessage($"{(obj as ChatMessage).UserName}: {(obj as ChatMessage).TextMessage}");
+                    HandleObject(obj);
                 }
                 catch (Exception e)
                 {
 
                 }
+            }
+        }
+
+        void HandleObject(object obj)
+        {
+            if(obj is ChatMessage)
+            {
+                clientForm.WriteMessage($"{(obj as ChatMessage).UserName}: {(obj as ChatMessage).TextMessage}");
+            } else if(obj is ConnectionControl)
+            {
+
             }
         }
     }
