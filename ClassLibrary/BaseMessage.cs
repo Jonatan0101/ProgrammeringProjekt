@@ -5,7 +5,7 @@ using System.Text;
 namespace ClassLibrary
 {
     [Serializable]
-    public class BaseMessage
+    public abstract class BaseMessage
     {
         public string UserName { get; set; }
     }

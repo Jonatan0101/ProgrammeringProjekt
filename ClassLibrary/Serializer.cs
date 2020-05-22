@@ -21,10 +21,8 @@ namespace ClassLibrary
                 object obj = binForm.Deserialize(memStream);
 
                 return obj;
-            }
-            catch (Exception e)
-            {
-            }
+            }catch (Exception){}
+
             return null;
         }
 

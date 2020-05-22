@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace ProjektServer
 {
+    // Objekt som server använder för att hantera klienter
     class ServerClient
     {
         TcpClient client;
         NetworkStream stream;
         Server server;
         public string UserName { get; set; }
+        public IPEndPoint IPEnd { get; set; }
 
         public ServerClient(TcpClient c, Server s)
         {
@@ -22,21 +24,21 @@ namespace ProjektServer
             server = s;
             stream = c.GetStream();
 
+            // Påbörjar mottagning av meddelanden asynkront
             RecieveMessageAsync();
         }
+        // Tar emot meddelanden och skickar tillbaka det som kontroll att klienten är kopplad
         async void RecieveMessageAsync()
         {
             byte[] buffer = new byte[client.ReceiveBufferSize];
-            IPEndPoint clientEP = (IPEndPoint)client.Client.RemoteEndPoint;
+            IPEnd = (IPEndPoint)client.Client.RemoteEndPoint;
             int bytesRead = 0;
 
             try
             {
-                NetworkStream stream = client.GetStream();
+                stream = client.GetStream();
                 bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-
-            }
-            catch (Exception){}
+            }catch (Exception){}
 
             object obj = Serializer.DeserializeObject(buffer);
             CheckRecievedObject(obj);
@@ -91,10 +93,7 @@ namespace ProjektServer
                 NetworkStream stream = client.GetStream();
                 await stream.WriteAsync(buffer, 0, buffer.Length);
             }
-            catch (Exception e)
-            {
-                
-            }
+            catch (Exception){}
         }
     }
 }

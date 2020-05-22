@@ -38,6 +38,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.lbxUsers = new System.Windows.Forms.ListBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -138,11 +140,32 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
+            // lbxUsers
+            // 
+            this.lbxUsers.FormattingEnabled = true;
+            this.lbxUsers.Location = new System.Drawing.Point(520, 156);
+            this.lbxUsers.Name = "lbxUsers";
+            this.lbxUsers.Size = new System.Drawing.Size(123, 225);
+            this.lbxUsers.TabIndex = 11;
+            this.lbxUsers.SelectedIndexChanged += new System.EventHandler(this.lbxUsers_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(516, 129);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(118, 24);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Users in chat";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lbxUsers);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label4);
@@ -173,6 +196,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.ListBox lbxUsers;
+        private System.Windows.Forms.Label label5;
     }
 }
 

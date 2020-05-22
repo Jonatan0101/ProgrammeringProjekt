@@ -33,6 +33,7 @@ namespace ProjektClient
         }
         
         private delegate void SafeCallDelegate(string text);
+        private delegate void SafeCallDelegateList(List<string> list);
         public void WriteMessage(string text)
         {
             if (lbxRecieved.InvokeRequired)
@@ -75,6 +76,11 @@ namespace ProjektClient
             }
         }
 
+        internal void ShowMessageBox(string v)
+        {
+            MessageBox.Show(v);
+        }
+
         private async void SendMessageAsync(object message)
         {
             byte[] buffer = Serializer.SerializeObject(message);
@@ -88,6 +94,27 @@ namespace ProjektClient
                 lbxRecieved.Items.Add("Fel med Send" + e.Message);
             }
         }
+        public void UpdateUserList(List<string> list)
+        {
+            lbxUsers.DataSource = null;
+            foreach (var s in lbxUsers.Items)
+            {
+                lbxUsers.Items.Remove(s);
+            }
+            foreach (string s in list)
+            {
+                lbxUsers.Items.Add(s);
+            }
+
+            //if (lbxUsers.InvokeRequired)
+            //{
+            //    var d = new SafeCallDelegateList(UpdateUserList);
+            //    lbxUsers.Invoke(d, new object[] { list });
+            //} else
+            //{
+            //    lbxUsers.DataSource = list;
+            //}
+        }
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (txtMessage.Text == "")
@@ -99,6 +126,11 @@ namespace ProjektClient
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogOut));
+        }
+
+        private void lbxUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

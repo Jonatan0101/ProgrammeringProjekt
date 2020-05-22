@@ -26,7 +26,7 @@ namespace ProjektClient
             t.Start();
             clientForm.WriteMessage("Started Recieving");
         }
-
+        // Tar emot meddelanden
         void RecieveMessages()
         {
             while (true)
@@ -40,7 +40,7 @@ namespace ProjektClient
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     object obj = Serializer.DeserializeObject(buffer);
-                    HandleObject(obj);
+                    CheckObject(obj);
                 }
                 catch (Exception e)
                 {
@@ -48,15 +48,18 @@ namespace ProjektClient
                 }
             }
         }
-
-        void HandleObject(object obj)
+        // Kontrollerar inkommande objekt och utför relevanta handlingar
+        void CheckObject(object obj)
         {
             if(obj is ChatMessage)
             {
                 clientForm.WriteMessage($"{(obj as ChatMessage).UserName}: {(obj as ChatMessage).TextMessage}");
             } else if(obj is ConnectionControl)
             {
-
+                if (((obj as ConnectionControl).ListOfUsers) != null)
+                {
+                    clientForm.UpdateUserList((obj as ConnectionControl).ListOfUsers);
+                }
             }
         }
     }

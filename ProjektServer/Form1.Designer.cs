@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.lbxUsers = new System.Windows.Forms.ListBox();
+            this.btnViewMessages = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -54,19 +57,36 @@
             // lbxUsers
             // 
             this.lbxUsers.FormattingEnabled = true;
-            this.lbxUsers.Location = new System.Drawing.Point(614, 109);
+            this.lbxUsers.Location = new System.Drawing.Point(513, 109);
             this.lbxUsers.Name = "lbxUsers";
             this.lbxUsers.Size = new System.Drawing.Size(174, 316);
             this.lbxUsers.TabIndex = 3;
             this.lbxUsers.SelectedIndexChanged += new System.EventHandler(this.lbxUsers_SelectedIndexChanged);
             this.lbxUsers.DoubleClick += new System.EventHandler(this.lbxUsers_DoubleClick);
             // 
+            // btnViewMessages
+            // 
+            this.btnViewMessages.Font = new System.Drawing.Font("Lucida Console", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewMessages.Location = new System.Drawing.Point(765, 109);
+            this.btnViewMessages.Name = "btnViewMessages";
+            this.btnViewMessages.Size = new System.Drawing.Size(182, 50);
+            this.btnViewMessages.TabIndex = 4;
+            this.btnViewMessages.Text = "View Messages";
+            this.btnViewMessages.UseVisualStyleBackColor = true;
+            this.btnViewMessages.Click += new System.EventHandler(this.btnViewMessages_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 50;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(959, 450);
+            this.Controls.Add(this.btnViewMessages);
             this.Controls.Add(this.lbxUsers);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label1);
@@ -82,6 +102,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListBox lbxUsers;
+        private System.Windows.Forms.Button btnViewMessages;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

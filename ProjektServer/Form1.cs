@@ -25,11 +25,13 @@ namespace ProjektServer
         public Form1()
         {
             InitializeComponent();
+            // Skapar objekten som hanterar servern
             dbManager = new DatabaseManager();
             server = new Server(this);
+            //timer1.Start();
         }
 
-        
+        // Används för att förändra kontroller från andra trådar
         private delegate void SafeCallDelegate(string text);
         public void LogMessage(string message)
         {
@@ -61,17 +63,7 @@ namespace ProjektServer
                 lbxUsers.Items.Add(user);
             }
         }
-        void RemoveUser(string user)
-        {
-            if (lbxUsers.InvokeRequired)
-            {
-                var d = new SafeCallDelegate(RemoveUser);
-                lbxUsers.Invoke(d, new object[] { user });
-            } else
-            {
-
-            }
-        }
+        // Tar bort användare från listan på ett trådsäker sätt
         internal void RemoveUserFromList(string user)
         {
             if (lbxUsers.InvokeRequired)
@@ -99,11 +91,31 @@ namespace ProjektServer
 
         private void lbxUsers_DoubleClick(object sender, EventArgs e)
         {
-            if(lbxUsers.SelectedIndex != -1)
-            {
-                MessageBox.Show((string)lbxUsers.SelectedItem);
-                server.RemoveClient(((string)lbxUsers.SelectedItem));
-            }
+
+        }
+
+        public void ShowMessageBox(string text)
+        {
+            MessageBox.Show(text);
+        }
+
+        private void btnViewMessages_Click(object sender, EventArgs e)
+        {
+            MessageViewer mv = new MessageViewer(server.DbManager);
+            mv.Show();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            server.UpdateLastConnected();
+            ChangeTimer();
+        }
+        public void ChangeTimer()
+        {
+            if (timer1.Enabled)
+                timer1.Stop();
+            else
+                timer1.Start();
         }
     }
 
