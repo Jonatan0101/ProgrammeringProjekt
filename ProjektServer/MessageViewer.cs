@@ -24,7 +24,6 @@ namespace ProjektServer
         {
             UpdateMessageBox();
 
-            MessageBox.Show(databaseManager.GetCellText("SELECT Username FROM Message WHERE Id = 5"));
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -52,9 +51,15 @@ namespace ProjektServer
         // Fyller fält om specifikt meddelande
         private void lbxMessages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtMessage.Text = databaseManager.GetCellText($"SELECT Message FROM Message WHERE Id = {lbxMessages.SelectedValue}");
-            txtUser.Text = databaseManager.GetCellText($"SELECT Username FROM Message WHERE Id = {lbxMessages.SelectedValue}");
-            txtTime.Text = databaseManager.GetCellText($"SELECT Time FROM Message WHERE Id = {lbxMessages.SelectedValue}");
+            txtValue.Text = lbxMessages.SelectedIndex.ToString();
+            txtMessage.Text = databaseManager.GetCellText($"SELECT Message FROM Message WHERE Id = {lbxMessages.SelectedIndex}");
+            txtUser.Text = databaseManager.GetCellText($"SELECT Username FROM Message WHERE Id = {lbxMessages.SelectedIndex}");
+            txtTime.Text = databaseManager.GetCellText($"SELECT Time FROM Message WHERE Id = {lbxMessages.SelectedIndex}");
+        }
+
+        private void lbxMessages_SelectedValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientRecieve.cs" />
+    <Compile Include="ClientSend.cs" />
     <Compile Include="ConnectForm.cs">
       <SubType>Form</SubType>
     </Compile>

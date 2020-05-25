@@ -107,7 +107,7 @@ namespace ProjektServer
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            server.UpdateLastConnected();
+            //server.UpdateLastConnected();
             ChangeTimer();
         }
         public void ChangeTimer()

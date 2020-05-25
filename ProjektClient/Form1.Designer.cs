@@ -105,7 +105,7 @@
             this.btnSend.Location = new System.Drawing.Point(29, 343);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(372, 38);
-            this.btnSend.TabIndex = 7;
+            this.btnSend.TabIndex = 0;
             this.btnSend.Text = "Skicka";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
@@ -161,6 +161,7 @@
             // 
             // Form1
             // 
+            this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);

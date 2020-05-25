@@ -22,6 +22,7 @@ namespace ProjektClient
         TcpClient client;
         int port = 12345;
         ClientRecieve cRecieve;
+        ClientSend cSend;
         public Form1()
         {
             InitializeComponent();
@@ -29,9 +30,9 @@ namespace ProjektClient
             client = new TcpClient();
             btnSend.Enabled = false;
             cRecieve = new ClientRecieve(client, this);
-            
+            cSend = new ClientSend(client, this);
         }
-        
+
         private delegate void SafeCallDelegate(string text);
         private delegate void SafeCallDelegateList(List<string> list);
         public void WriteMessage(string text)
@@ -48,52 +49,28 @@ namespace ProjektClient
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (!client.Connected) Connect();
-            if (client.Connected) cRecieve.StartRecieving();
-        }
-
-        private async void Connect()
-        {
-            try
-            {
-                IPAddress ip = IPAddress.Parse(txtIP.Text);
-                await client.ConnectAsync(ip, port);
-                
-            }
-            catch (Exception e)
-            {
-                lbxRecieved.Items.Add("Fel i connect" + e.Message);
-            }
+            if (!client.Connected) cSend.Connect(txtIP.Text, txtName.Text);
             if (client.Connected)
             {
-                SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogIn));
-
-                btnConnect.Enabled = false;
-                btnSend.Enabled = true;
-            } else
-            {
-                
+                cRecieve.StartRecieving();
+                txtName.ReadOnly = true;
+                txtIP.ReadOnly = true;
             }
+
         }
 
-        internal void ShowMessageBox(string v)
+        public void LogErrorMessage(string m, Exception e = null)
         {
-            MessageBox.Show(v);
+            lbxRecieved.Items.Add(m + e.Message);
         }
 
-        private async void SendMessageAsync(object message)
+        public void SetConnectedButtons()
         {
-            byte[] buffer = Serializer.SerializeObject(message);
-            try
-            {
-                NetworkStream stream = client.GetStream();
-                await stream.WriteAsync(buffer, 0, buffer.Length);
-            }
-            catch (Exception e)
-            {
-                lbxRecieved.Items.Add("Fel med Send" + e.Message);
-            }
+            btnConnect.Enabled = false;
+            btnSend.Enabled = true;
         }
+
+        // Uppdaterar anslutna klienter, ibland
         public void UpdateUserList(List<string> list)
         {
             lbxUsers.DataSource = null;
@@ -106,26 +83,19 @@ namespace ProjektClient
                 lbxUsers.Items.Add(s);
             }
 
-            //if (lbxUsers.InvokeRequired)
-            //{
-            //    var d = new SafeCallDelegateList(UpdateUserList);
-            //    lbxUsers.Invoke(d, new object[] { list });
-            //} else
-            //{
-            //    lbxUsers.DataSource = list;
-            //}
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (txtMessage.Text == "")
                 return;
-            SendMessageAsync(new ChatMessage(txtMessage.Text, txtName.Text));
+            //SendMessageAsync(new ChatMessage(txtMessage.Text, txtName.Text));
+            cSend.SendMessageAsync(new ChatMessage(txtMessage.Text, txtName.Text));
             txtMessage.Text = "";
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogOut));
+            cSend.SendMessageAsync(new ConnectionControl(txtName.Text, ConnectionStatus.LogOut));
         }
 
         private void lbxUsers_SelectedIndexChanged(object sender, EventArgs e)

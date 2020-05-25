@@ -36,6 +36,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtTime = new System.Windows.Forms.Label();
             this.txtMessage = new System.Windows.Forms.RichTextBox();
+            this.txtValue = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lbxMessages
@@ -48,6 +50,7 @@
             this.lbxMessages.Size = new System.Drawing.Size(306, 420);
             this.lbxMessages.TabIndex = 0;
             this.lbxMessages.SelectedIndexChanged += new System.EventHandler(this.lbxMessages_SelectedIndexChanged);
+            this.lbxMessages.SelectedValueChanged += new System.EventHandler(this.lbxMessages_SelectedValueChanged);
             // 
             // btnDelete
             // 
@@ -120,11 +123,33 @@
             this.txtMessage.TabIndex = 8;
             this.txtMessage.Text = "";
             // 
+            // txtValue
+            // 
+            this.txtValue.Font = new System.Drawing.Font("Lucida Console", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtValue.Location = new System.Drawing.Point(749, 410);
+            this.txtValue.Name = "txtValue";
+            this.txtValue.ReadOnly = true;
+            this.txtValue.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtValue.Size = new System.Drawing.Size(39, 23);
+            this.txtValue.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Lucida Console", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(675, 413);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 16);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Value:";
+            // 
             // MessageViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtValue);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.txtTime);
             this.Controls.Add(this.label2);
@@ -151,5 +176,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label txtTime;
         private System.Windows.Forms.RichTextBox txtMessage;
+        private System.Windows.Forms.TextBox txtValue;
+        private System.Windows.Forms.Label label3;
     }
 }

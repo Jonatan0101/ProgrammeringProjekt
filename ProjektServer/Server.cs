@@ -88,7 +88,7 @@ namespace ProjektServer
                 cc.ListOfUsers.Add(sc.UserName);
             }
             SendMessage(cc);
-            form.ChangeTimer();
+            //form.ChangeTimer();
             
         }
 

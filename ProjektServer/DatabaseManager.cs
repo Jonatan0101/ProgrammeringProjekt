@@ -42,7 +42,7 @@ namespace ProjektServer
             {
                 connection.Open();
                 try
-                {
+                { 
                     text = (string)command.ExecuteScalar();
                     return text;
                 }
